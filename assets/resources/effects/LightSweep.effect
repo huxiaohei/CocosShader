@@ -1,0 +1,127 @@
+/*================================================================
+ * Description 扫光
+ * Email huliuworld@yahoo.com
+ * Created on Sun Aug 30 2020 09:49:48
+ * Copyright (c) 2020 刘虎
+================================================================*/
+
+
+CCEffect %{
+  techniques:
+  - name: "扫光"
+    passes:
+    - vert: vs
+      frag: fs
+      blendState:
+        targets:
+        - blend: true
+      rasterizerState:
+        cullMode: none
+      properties:
+        texture: { value: white }
+				alphaThreshold: { value: 0.5 }
+				angle: { value: 30.0 }
+				widht: { value: 0.5 }
+				runTime: { value: 0.5 }
+				interval: { value: 2.0 }
+				delay: { value: 0.0 }
+
+}%
+
+
+CCProgram vs %{
+  precision highp float;
+
+  #include <cc-global>
+  #include <cc-local>
+
+  in vec3 a_position;
+  in vec4 a_color;
+  out vec4 v_color;
+
+  #if USE_TEXTURE
+  in vec2 a_uv0;
+  out vec2 v_uv0;
+  #endif
+
+  void main () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if CC_USE_MODEL
+    pos = cc_matViewProj * cc_matWorld * pos;
+    #else
+    pos = cc_matViewProj * pos;
+    #endif
+
+    #if USE_TEXTURE
+    v_uv0 = a_uv0;
+    #endif
+
+    v_color = a_color;
+
+    gl_Position = pos;
+  }
+}%
+
+
+CCProgram fs %{
+  precision highp float;
+  
+  #include <alpha-test>
+  #include <texture>
+
+  in vec4 v_color;
+	
+	uniform params {
+		float	angle;
+		float widht;
+		float runTime;
+		float interval;
+		float delay;
+	};
+
+  #if USE_TEXTURE
+  in vec2 v_uv0;
+  uniform sampler2D texture;
+  #endif
+
+	// @params
+	// uv
+	// angle 			扫光的角度(顺时针)
+	// width			原图片的比例(0~1)
+	// runTime		扫光运行总时长
+	// interval 	一次扫光时长
+	// delay			延时一段时间在开始扫光
+	float flash(vec2 uv, float angle, float width, float runTime, float interval, float delay) {
+		float brightness = 0.0;
+		float radian = 0.0174444 * angle;
+		float startTime = floor(runTime / (interval + delay)) * (interval + delay);
+		float passTime = runTime - startTime - delay;
+		if (passTime > 0.0) {
+			float projX = uv.y / tan(radian);
+			float borderR = passTime / interval * (1.0 + abs(sin(radian)));
+			float borderL = borderR - width;
+			float posR = borderR + projX + borderR * width;	// 点所在行的右边界
+			float posL = borderL + projX + borderR * width;	// 点所在行的左边界
+			if (uv.x < posR && uv.x > posL) {
+				float mid = (posL + posR) * 0.5;
+				brightness = 1.0 - abs(uv.x - mid) / (width * 0.5);
+			}
+		}
+		return brightness;
+	}
+
+  void main () {
+    vec4 o = vec4(1.0, 1.0, 1.0, 1.0);
+
+    #if USE_TEXTURE
+      CCTexture(texture, v_uv0, o);
+    #endif
+
+    o *= v_color;
+
+    ALPHA_TEST(o);
+		float brightness = flash(v_uv0, angle, widht, runTime, interval, delay);
+    gl_FragColor = o + vec4(1.0, 1.0, 1.0, 1.0) * brightness * o.a;
+	}
+}%

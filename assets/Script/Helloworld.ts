@@ -1,16 +1,20 @@
+/*================================================================
+ * Description 
+ * Email huliuworld@yahoo.com
+ * Created on Sun Aug 30 2020 09:46:52
+ * Copyright (c) 2020 刘虎
+================================================================*/
+
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class Helloworld extends cc.Component {
+export default class ShaderScene extends cc.Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
+    protected start () {
+        cc.dynamicAtlasManager.enabled = false;
+    }
 
-    @property
-    text: string = 'hello';
-
-    start () {
-        // init logic
-        this.label.string = this.text;
+    protected update(dt: number) {
+        
     }
 }
