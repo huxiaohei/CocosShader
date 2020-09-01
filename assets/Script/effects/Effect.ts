@@ -25,9 +25,19 @@ export default class Effect extends cc.Component {
             return;
         }
         let material = cc.Material.create(this.effect, 0);
-        material.define("USE_TEXTURE", true);
-        material.name = "LightSweep";
+        material.name = this.effect.name;
+        this.setConstProperty(material);
         sp.setMaterial(0, material);
+    }
+
+    /**
+     * 子类实现
+     *
+     * @protected
+     * @memberof Effect
+     */
+    protected setConstProperty(material: cc.Material) {
+
     }
 
     protected update (dt: number) {
