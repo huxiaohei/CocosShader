@@ -1,0 +1,84 @@
+/*================================================================
+ * Description 加载旋转
+ * Email huliuworld@yahoo.com
+ * Created on Sun Sep 20 2020 17:09:58
+ * Copyright (c) 2020 刘虎
+================================================================*/
+
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: vs
+      frag: fs
+      blendState:
+        targets:
+        - blend: true
+      rasterizerState:
+        cullMode: none
+      properties:
+        texture: { value: white }
+        alphaThreshold: { value: 0.5 }
+        interval: { value: 1.0 }
+        anglePerSecond: { value: 3.1415926 }
+        runTime: { value: 0.0 }
+}%
+
+
+CCProgram vs %{
+
+  precision highp float;
+
+  #include <cc-global>
+  #include <cc-local>
+
+  in vec3 a_position;
+  in vec4 a_color;
+  out vec4 v_color;
+  
+  in vec2 a_uv0;
+  out vec2 v_uv0;
+
+  void main () {
+    vec4 pos = vec4(a_position, 1);
+    pos = cc_matViewProj * pos;
+    v_uv0 = a_uv0;
+    v_color = a_color;
+    gl_Position = pos;
+  }
+}%
+
+
+CCProgram fs %{
+
+  precision highp float;
+  
+  #include <alpha-test>
+  #include <texture>
+
+  in vec4 v_color;
+  in vec2 v_uv0;
+  uniform sampler2D texture;
+  uniform params {
+    float interval;
+    float anglePerSecond;
+    float runTime;
+  };
+
+  vec2 fixUV() {
+    // float startTime = floor(runTime / interval) * interval;
+    float deltaAngle = runTime * anglePerSecond;
+    vec2 tmp = v_uv0 - vec2(0.5, 0.5);
+    tmp = vec2(tmp.x * cos(deltaAngle) + tmp.y * sin(deltaAngle),
+              tmp.x * sin(deltaAngle) - tmp.y * cos(deltaAngle));
+    return tmp + vec2(0.5, 0.5);
+  }
+
+  void main () {
+    vec4 o = vec4(1, 1, 1, 1);
+    vec2 v_uv1 = fixUV();
+    CCTexture(texture, v_uv1, o);
+    o *= v_color;
+    ALPHA_TEST(o);
+    gl_FragColor = o;
+  }
+}%

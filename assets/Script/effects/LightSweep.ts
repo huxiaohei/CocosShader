@@ -42,7 +42,7 @@ export class LightSweep extends Effect {
             material.setProperty("interval", this.interval);
             material.setProperty("delay", this.delay);
             break;
-        }   
+        }
     }
 }
 

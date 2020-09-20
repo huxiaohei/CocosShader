@@ -63,7 +63,7 @@ CCProgram fs %{
   in vec4 v_color;
 	
 	uniform params {
-		float	angle;
+		float angle;
 		float widht;
 		float runTime;
 		float interval;
