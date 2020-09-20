@@ -33,9 +33,7 @@ export class LightSweep extends Effect {
         let materials = sp.getMaterials();
         for (let i = 0; i < materials.length; i++) {
             let material = materials[i];
-            if (material.name.indexOf(this.effect.name) !== 0) {
-                continue;
-            }
+            if (material.name.indexOf(this.effect.name) !== 0) continue;
             material.setProperty("angle", this.angle);
             material.setProperty("widht", this.widht);
             material.setProperty("runTime", this.runTime);

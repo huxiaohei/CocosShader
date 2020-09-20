@@ -21,13 +21,11 @@ export default class Effect extends cc.Component {
 
     protected applyEffect() {
         let sp = this.node.getComponent(cc.Sprite);
-        if (!cc.isValid(sp) || !cc.isValid(this.effect)) {
-            return;
-        }
+        if (!cc.isValid(sp) || !cc.isValid(this.effect)) return;
         let material = cc.Material.create(this.effect, 0);
         material.name = this.effect.name;
-        this.setConstProperty(material);
         sp.setMaterial(0, material);
+        this.setConstProperty(material);
     }
 
     /**

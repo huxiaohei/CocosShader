@@ -29,9 +29,7 @@ export default class Gray extends Effect {
         let materials = sp.getMaterials();
         for (let i = 0; i < materials.length; i++) {
             let material = materials[i];
-            if (material.name.indexOf(this.effect.name) !== 0) {
-                continue;
-            }
+            if (material.name.indexOf(this.effect.name) !== 0) continue;
             material.setProperty("rFactor", this.rFactor);
             material.setProperty("gFactor", this.gFactor);
             material.setProperty("bFactor", this.bFactor);

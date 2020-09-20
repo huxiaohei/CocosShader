@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "LoadingPrefab",
+    "_name": "RotationPrefab",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -79,7 +79,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "loading",
+    "_name": "sword",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -107,8 +107,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 400,
-      "height": 400
+      "width": 285,
+      "height": 564
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -158,10 +158,10 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "5b4fa8d1-0276-4e6d-b248-325864b75363"
+      "__uuid__": "11106a3e-0237-40fb-b67e-e255864a94b4"
     },
     "_type": 0,
-    "_sizeMode": 0,
+    "_sizeMode": 1,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -186,7 +186,7 @@
       "__uuid__": "4c6401f5-cbee-44f2-a5fb-aee817e7648f"
     },
     "interval": 1,
-    "direction": 3,
+    "direction": 2,
     "_id": ""
   },
   {
@@ -195,9 +195,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "296c1f58-bcda-441c-9aaf-312444e8e622"
+      "__uuid__": "8b6062dc-9755-410c-80ee-8b9189305eab"
     },
-    "fileId": "2a60PnyNBND4kOKcV+kAgS",
+    "fileId": "66Qh861ahF0Z1Ismfv94PF",
     "sync": false
   },
   {
@@ -233,9 +233,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "296c1f58-bcda-441c-9aaf-312444e8e622"
+      "__uuid__": "8b6062dc-9755-410c-80ee-8b9189305eab"
     },
-    "fileId": "70LbkJ/6NDn6XvOIFy1IPr",
+    "fileId": "5dFxm8aLJHzqkWPlZ7eM1w",
     "sync": false
   }
 ]

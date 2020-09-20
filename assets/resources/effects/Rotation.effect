@@ -1,13 +1,14 @@
 /*================================================================
- * Description 加载旋转
+ * Description 旋转
  * Email huliuworld@yahoo.com
- * Created on Sun Sep 20 2020 17:09:58
+ * Created on Sun Sep 20 2020 20:15:35
  * Copyright (c) 2020 刘虎
 ================================================================*/
 
 CCEffect %{
   techniques:
-  - passes:
+  - name: "Rotation"
+    passes:
     - vert: vs
       frag: fs
       blendState:
@@ -20,6 +21,7 @@ CCEffect %{
         alphaThreshold: { value: 0.5 }
         interval: { value: 1.0 }
         anglePerSecond: { value: 3.1415926 }
+        rotationDirection: { int: 1 }
         runTime: { value: 0.0 }
 }%
 
@@ -61,15 +63,23 @@ CCProgram fs %{
   uniform params {
     float interval;
     float anglePerSecond;
+    int rotationDirection;
     float runTime;
   };
 
   vec2 fixUV() {
-    // float startTime = floor(runTime / interval) * interval;
     float deltaAngle = runTime * anglePerSecond;
     vec2 tmp = v_uv0 - vec2(0.5, 0.5);
-    tmp = vec2(tmp.x * cos(deltaAngle) + tmp.y * sin(deltaAngle),
-              tmp.x * sin(deltaAngle) - tmp.y * cos(deltaAngle));
+    if (rotationDirection == 1) {
+      if (cos(deltaAngle) == 0.0) deltaAngle += 0.0000001;
+      tmp = vec2(tmp.x, tmp.y / cos(deltaAngle));
+    } else if (rotationDirection == 2) {
+      if (cos(deltaAngle) == 0.0) deltaAngle += 0.0000001;
+      tmp = vec2(tmp.x / cos(deltaAngle), tmp.y);
+    } else {
+      tmp = vec2(tmp.x * cos(deltaAngle) + tmp.y * sin(deltaAngle),
+                tmp.x * sin(deltaAngle) - tmp.y * cos(deltaAngle));
+    }
     return tmp + vec2(0.5, 0.5);
   }
 
