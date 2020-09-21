@@ -20,12 +20,28 @@ export default class Effect extends cc.Component {
     }
 
     protected applyEffect() {
-        let sp = this.node.getComponent(cc.Sprite);
-        if (!cc.isValid(sp) || !cc.isValid(this.effect)) return;
+        if (!cc.isValid(this.effect)) return
+        let sp: cc.Sprite | cc.Label = this.node.getComponent(cc.Sprite);
+        if (!cc.isValid(sp)) {
+            sp = this.node.getComponent(cc.Label);
+            if (!cc.isValid(sp)) return;
+        }
         let material = cc.Material.create(this.effect, 0);
         material.name = this.effect.name;
         sp.setMaterial(0, material);
         this.setConstProperty(material);
+    }
+
+    /**
+     * 颜色转数组
+     *
+     * @protected
+     * @param {cc.Color} [color=cc.color(255, 255, 255, 255)]
+     * @returns {number[]}
+     * @memberof Effect
+     */
+    protected colorToNumArr(color: cc.Color = cc.color(255, 255, 255, 255)): number[] {
+        return [color.r/255.0, color.g/255.0, color.b/255.0, color.a/255.0];
     }
 
     /**
